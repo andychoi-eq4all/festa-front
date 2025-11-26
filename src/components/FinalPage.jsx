@@ -1,9 +1,16 @@
 // 최종 성공 페이지
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useBGM } from "../contexts/BGMContext";
 
 const FinalPage = () => {
   const navigate = useNavigate();
+  const { setPageContext } = useBGM();
+
+  // 최종 성공 페이지는 기본 볼륨으로 설정
+  useEffect(() => {
+    setPageContext("final");
+  }, [setPageContext]);
 
   // 5초 후 / 홈으로 이동
   useEffect(() => {

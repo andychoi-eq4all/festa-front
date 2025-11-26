@@ -1,18 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import WebGLPlayer from "./WebGLPlayer";
+import { useBGM } from "../contexts/BGMContext";
 import logo from "../assets/logo.png";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { setPageContext } = useBGM();
+
+  // 랜딩페이지는 기본 볼륨으로 설정
+  useEffect(() => {
+    setPageContext("landing");
+  }, [setPageContext]);
 
   const handleStart = () => {
-    navigate("/tutorial");
+    navigate("/ready");
   };
 
-  const handleNext = () => {
-    navigate("/tutorial");
-  };
+  const handleNext = useCallback(() => {
+    navigate("/ready");
+  }, [navigate]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {

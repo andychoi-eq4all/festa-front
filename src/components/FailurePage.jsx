@@ -1,13 +1,20 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import WebGLPlayer from "./WebGLPlayer";
+import { useBGM } from "../contexts/BGMContext";
 
 const FailurePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/"; // 이전 페이지 경로
   const [selectedButton, setSelectedButton] = useState(null);
+  const { setPageContext, playFailSound } = useBGM();
+
+  useEffect(() => {
+    setPageContext("failure");
+    // 페이지 진입 시 실패 사운드 재생
+    playFailSound();
+  }, [setPageContext, playFailSound]);
 
   const handleGoodChoice = useCallback(() => {
     if (selectedButton) return;
@@ -53,10 +60,7 @@ const FailurePage = () => {
 
       {/* 메인 콘텐츠 */}
       <div className="flex w-full h-full min-h-screen">
-        <div className="w-[50%] flex justify-center items-center bg-brand-bg px-12">
-          <WebGLPlayer animationName={"2147_W_애석"} previewMode={true} />
-        </div>
-        <div className="w-[50%] flex flex-col justify-center items-center px-12">
+        <div className="w-full flex flex-col justify-center items-center px-12">
           {/* 메인 텍스트 */}
           <div className="mb-16 text-center">
             <p className="text-4xl font-bold text-brand-gray leading-relaxed tracking-tighter mb-4">

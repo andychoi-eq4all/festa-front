@@ -1,26 +1,46 @@
 import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import WebGLPlayerClass from "../userInterface";
 
+// 캐릭터와 아바타 매핑 정보
+const CHARACTER_AVATARS = {
+  // Eve: ["Eve_사가페01", "Eve_사가페02"],
+  // Adam: ["Adam_사가페01", "Adam_사가페02"],
+  // Jonathan: ["akaoB_Jonathan_Suit01"],
+  Clara: ["Clara_사가페"],
+};
+
+// 랜덤 캐릭터와 아바타 선택 함수
+const getRandomCharacterAndAvatar = () => {
+  const characters = Object.keys(CHARACTER_AVATARS);
+  const randomCharacter =
+    characters[Math.floor(Math.random() * characters.length)];
+  const avatars = CHARACTER_AVATARS[randomCharacter];
+  const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+
+  return { character: randomCharacter, avatar: randomAvatar };
+};
+
 const sentences = {
-  안녕하세요: "1085_W_안녕히계세요",
+  사랑합니다: "27903_G_사랑해",
   나비: "9950_W_나비",
   기차: "319_W_열차",
   대화: "7067_W_대화",
   반가워요: "1700_W_희열",
   바다: "26690_G_바다",
-  수어: "4940_W_수화",
+  앉다: "13555_W_앉다",
   라면: "3138_W_국수",
-  감사합니다: "25401_W_고맙다",
+  존경합니다: "1556_W_존경",
   집: "25996_G_집",
   좋다: "5025_W_좋다",
   커피: "26521_G_커피",
-  사랑합니다: "27903_G_사랑해",
+  바람: "232_W_선선하다",
   아침: "4231_W_일출",
   자동차: "24932_W_자동차",
   빵: "2490_W_빵",
-  존경합니다: "1556_W_존경",
+  약속: "1267_W_이라야",
   배: "4642_W_선박",
-  농인: "13408_W_농아",
+  달팽이: "11273_W_달팽이",
   휴대폰: "3086_W_휴대폰",
 };
 
@@ -28,7 +48,7 @@ const hardSentences = {
   축하해요: "1826_W_축하",
   미안해요: "6009_W_죄송하다",
   알았어요: "4214_W_인식",
-  모르겠어요: "13619_W_모르다",
+  기억하다: "730_W_외우다",
   대단해요: "27587_G_대단하다",
   맛있어요: "3194_W_맛나다",
   행복해요: "1066_W_행복",
@@ -40,7 +60,6 @@ const hardSentences = {
 export const playableWords = Object.keys(sentences);
 export const hardWords = Object.keys(hardSentences);
 
-// eslint-disable-next-line react/prop-types
 const WebGLPlayer = ({
   onBackToHome,
   previewMode = false,
@@ -126,7 +145,11 @@ const WebGLPlayer = ({
       });
       playerRef.current = webGLPlayer;
 
-      await webGLPlayer.playerInit("Eve", "Eve", (callback) => {
+      // 랜덤하게 캐릭터와 아바타 선택
+      const { character, avatar } = getRandomCharacterAndAvatar();
+      console.log(`Selected character: ${character}, avatar: ${avatar}`);
+
+      await webGLPlayer.playerInit(character, avatar, (callback) => {
         console.log(callback, "ready");
         setIsPlayerReady(true);
       });
@@ -292,6 +315,13 @@ const WebGLPlayer = ({
       </div>
     </div>
   );
+};
+
+WebGLPlayer.propTypes = {
+  onBackToHome: PropTypes.func,
+  previewMode: PropTypes.bool,
+  sentence: PropTypes.string,
+  animationName: PropTypes.string,
 };
 
 export default WebGLPlayer;

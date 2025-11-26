@@ -1,9 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { useBGM } from "../contexts/BGMContext";
 
 const FinalFailPage = () => {
   const navigate = useNavigate();
+  const { setPageContext } = useBGM();
+
+  // 최종 실패 페이지는 기본 볼륨으로 설정
+  useEffect(() => {
+    setPageContext("final-fail");
+  }, [setPageContext]);
 
   const goToHome = () => {
     navigate("/");
